@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  firstName  String    @db.VarChar(200)
+  lastName   String    @db.VarChar(200)
+  email      String    @unique() @db.VarChar(200)
+  password   String
+  phone      String    @db.VarChar(10)
+  role       Role      @default(USER)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  address    Address[]
+  grocery    Grocery[]
+}
+
+model Address {
+  id         Int      @id @default(autoincrement())
+  street     String
+  city       String   @db.VarChar(200)
+  state      String   @db.VarChar(200)
+  pincode    String   @db.VarChar(200)
+  country    String   @db.VarChar(200)
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model Grocery {
+  id          Int      @id @default(autoincrement())
+  img         String?
+  name        String   @db.VarChar(200)
+  qty         Int      @default(0)
+  category    String   @db.VarChar(200)
+  description String
+  price       Int      @default(0)
+  User        User     @relation(fields: [createdBy], references: [id])
+  createdBy   Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
