@@ -1,6 +1,9 @@
-import express from "express";
+import cookieParser from "cookie-parser";
 import "dotenv/config";
-import AuthRouter from "./router/auth.router"
+import express from "express";
+
+
+import { AuthRouter, ProductRouter } from "./router";
 
 // import config from "./config/environment.config"
 // const {PORT} = config;
@@ -10,14 +13,12 @@ const server = express();
 
 server.use(express.json({ limit: "1mb" }));
 server.use(express.urlencoded({ extended: true, limit: "1mb" }));
+server.use(cookieParser())
 
-server.use("/",(req,res,next)=>{
-  console.log(req.path)
-  next()
-})
+
 
 server.use("/api/auth",AuthRouter);
-// server.use("/product");
+server.use("/api/product",ProductRouter);
 
 server.listen(PORT, () => {
   console.clear();

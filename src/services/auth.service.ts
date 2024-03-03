@@ -1,18 +1,17 @@
-
-
 import prisma from "../config/db.config";
-import { User } from "../interface/common.interface";
+import { IUser, IUserWithPassword } from "../interface/common.interface";
 
-
-export class AuthRepositoryService {
-  static async create(payload: User) {
+export default class AuthRepositoryService {
+  static async create(payload: IUserWithPassword) {
     try {
       const user = await prisma.user.create({
         data: payload,
+        select: selectAttributes,
       });
 
       return user;
     } catch (error) {
+      console.error(error);
       throw new Error("Something went wrong while uploading the data in db");
     }
   }
@@ -23,16 +22,8 @@ export class AuthRepositoryService {
         where: {
           id: id,
         },
-        select: {
-          created_at: false,
-          updated_at: false,
-          password: false,
-        },
+        select: selectAttributes,
       });
-
-      if (!user) {
-        throw new Error("No user found");
-      }
 
       return user;
     } catch (error) {
@@ -46,15 +37,8 @@ export class AuthRepositoryService {
         where: {
           email: email,
         },
-        select: {
-          created_at: false,
-          updated_at: false,
-        },
+        select: {...selectAttributes, password:true},
       });
-
-      if (!user) {
-        throw new Error("No user found");
-      }
 
       return user;
     } catch (error) {
@@ -62,3 +46,12 @@ export class AuthRepositoryService {
     }
   }
 }
+
+const selectAttributes = {
+  id: true,
+  firstName: true,
+  lastName: true,
+  email: true,
+  phone: true,
+  role: true,
+};

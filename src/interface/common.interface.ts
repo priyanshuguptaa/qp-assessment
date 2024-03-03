@@ -1,29 +1,37 @@
 import { Role } from "../utils/common.enum";
 
-interface User {
+export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  password_confirmation ?: string;
   phone: string;
   role ?: Role;
 }
 
-interface Address {
+export interface IUserWithPassword extends IUser {
+  password: string;
+  password_confirmation ?: string;
+}
+
+export interface ILoginData {
+  email: string;
+  password: string;
+}
+
+export interface IAddress {
   id?: number;
   street?: string;
   city?: string;
   state?: string;
   pincode?: string;
   country?: string;
-  user?: User;
+  user?: IUser;
   userId?: number;
   created_at?: Date;
   updated_at?: Date;
 }
 
-interface Product {
+export interface Product {
   id?: number;
   img?: string | null;
   name?: string;
@@ -31,7 +39,7 @@ interface Product {
   category?: string;
   description?: string;
   price?: number;
-  user?: User;
+  user?: IUser;
   createdBy?: number;
   created_at?: Date;
   updated_at?: Date;
@@ -39,6 +47,4 @@ interface Product {
 
 
 
-export {
-    User, Address, Product
-}
+
