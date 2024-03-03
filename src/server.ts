@@ -1,6 +1,8 @@
 import cookieParser from "cookie-parser";
 import "dotenv/config";
 import express from "express";
+import fileUpload from "express-fileupload";
+
 
 
 import { AuthRouter, ProductRouter } from "./router";
@@ -13,7 +15,9 @@ const server = express();
 
 server.use(express.json({ limit: "1mb" }));
 server.use(express.urlencoded({ extended: true, limit: "1mb" }));
+server.use(fileUpload());
 server.use(cookieParser())
+server.use(express.static("public"));
 
 
 

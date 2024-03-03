@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import jwt, { Secret } from "jsonwebtoken";
-import { IUser } from "../interface/common.interface";
+import { IUser, IUserWithId } from "../interface";
 import { ErrorFormat } from "../utils/error.format";
 
 declare global {
   namespace Express {
     interface Request {
-      user?: IUser; // Define the user property
+      user?: IUserWithId; // Define the user property
     }
   }
 }
@@ -28,7 +28,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
   jwt.verify(token, secretKey, (err : any, user) => {
     if (err) return res.status(StatusCodes.UNAUTHORIZED).json(new ErrorFormat(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, "unauthorized", req.path));
-    req.user = user as IUser;
+    req.user = user as IUserWithId;
     next();
   });
 };

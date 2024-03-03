@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IUser } from "../interface/common.interface";
+import { IUser } from "../interface";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { ErrorFormat } from "../utils/error.format";
 

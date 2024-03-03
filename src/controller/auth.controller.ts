@@ -6,8 +6,8 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import jwt, { Secret } from "jsonwebtoken";
 
 
-import { ILoginData, IUser, IUserWithPassword } from "../interface/common.interface";
-import { AuthRepositoryService as AuthService } from "../services";
+import { ILoginData, IUserWithPassword } from "../interface";
+import { AuthRepositoryService as AuthService } from "../service";
 import { ErrorFormat } from "../utils/error.format";
 import { loginSchema, registerSchema } from "../validations/common.validation";
 
