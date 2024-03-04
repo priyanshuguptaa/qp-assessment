@@ -18,6 +18,7 @@ model User {
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now())
   product    Product[]
+  orders     Order[]
 }
 
 model Product {
@@ -32,8 +33,20 @@ model Product {
   user        User     @relation(fields: [createdBy], references: [id])
   createdBy   Int
   isAvailable Boolean  @default(true)
+  orders      Order[]
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
+}
+
+model Order {
+  id           Int       @id @default(autoincrement())
+  totalPrice   Int
+  totalProduct Int
+  user         User      @relation(fields: [purchasedBy], references: [id])
+  purchasedBy  Int
+  products     Product[] 
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @default(now())
 }
 
 enum Role {

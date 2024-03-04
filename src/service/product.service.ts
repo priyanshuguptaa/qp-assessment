@@ -1,13 +1,12 @@
 import prisma from "../config/db.config";
-import { IProduct, IProductUpdate } from "../interface";
+import { ICartItem, IProduct, IProductUpdate } from "../interface";
 
 export default class ProductRepositoryService {
   static async create(payload: IProduct) {
     try {
       const product = await prisma.product.create({
         data: payload,
-        select: {...selectAttributes, createdBy:true},
-        
+        select: { ...selectProductAttributes, createdBy: true },
       });
 
       return product;
@@ -21,8 +20,7 @@ export default class ProductRepositoryService {
         where: {
           id: id,
         },
-        select: {...selectAttributes},
-
+        select: { ...selectProductAttributes },
       });
 
       return product;
@@ -55,7 +53,7 @@ export default class ProductRepositoryService {
         take: limit,
         skip: skip,
         where: whereClause,
-        select: {...selectAttributes, createdBy:isBookable ? false : true},
+        select: { ...selectProductAttributes, createdBy: isBookable ? false : true },
       });
 
       return product;
@@ -80,8 +78,7 @@ export default class ProductRepositoryService {
         where: {
           category: category,
         },
-        select: {...selectAttributes},
-
+        select: { ...selectProductAttributes },
       });
 
       return product;
@@ -96,8 +93,7 @@ export default class ProductRepositoryService {
           id: id,
         },
         data,
-        select: {...selectAttributes, createdBy : true},
-
+        select: { ...selectProductAttributes, createdBy: true },
       });
 
       return product;
@@ -111,8 +107,7 @@ export default class ProductRepositoryService {
         where: {
           id: id,
         },
-        select: {...selectAttributes, createdBy : true},
-
+        select: { ...selectProductAttributes, createdBy: true },
       });
 
       return product;
@@ -122,25 +117,55 @@ export default class ProductRepositoryService {
   }
 
   static async getProductsCount(isBookable: boolean) {
-    const whereClause: any = {
-      qty: {
-        gte: isBookable ? 1 : 0,
-      },
-    };
+    try {
+      const whereClause: any = {
+        qty: {
+          gte: isBookable ? 1 : 0,
+        },
+      };
 
-    if (isBookable) {
-      whereClause.isAvailable = true;
+      if (isBookable) {
+        whereClause.isAvailable = true;
+      }
+
+      const count = await prisma.product.count({
+        where: whereClause,
+      });
+
+      return count;
+    } catch (error: any) {
+      throw new Error("Something went wrong");
     }
+  }
 
-    const count = await prisma.product.count({
-      where: whereClause,
-    });
+  static async findAllByIds(productIds: number[]) {
+    try {
+      return prisma.product.findMany({
+        where: { id: { in: productIds } },
+        select: selectProductAttributes,
+      });
+    } catch (error: any) {
+      throw new Error("Something went wrong");
+    }
+  }
 
-    return count;
+  static async updateQuantity(cartItems: ICartItem[]) {
+    try {
+      const updatePromises = cartItems.map(async ({ id, qty }) => {
+        await prisma.product.update({
+          where: { id: id },
+          data: { qty: { decrement: qty } },
+        });
+      });
+
+      return await Promise.all(updatePromises);
+    } catch (error: any) {
+      throw new Error("Something went wrong");
+    }
   }
 }
 
-const selectAttributes : any = {
+export const selectProductAttributes: any = {
   id: true,
   sku: true,
   img: true,

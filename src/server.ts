@@ -5,7 +5,7 @@ import fileUpload from "express-fileupload";
 
 
 
-import { AuthRouter, ProductRouter } from "./router";
+import { AuthRouter, ProductRouter, OrderRouter } from "./router";
 
 // import config from "./config/environment.config"
 // const {PORT} = config;
@@ -23,6 +23,7 @@ server.use(express.static("public"));
 
 server.use("/api/auth",AuthRouter);
 server.use("/api/product",ProductRouter);
+server.use("/api/order",OrderRouter);
 
 server.listen(PORT, () => {
   console.clear();
