@@ -28,7 +28,7 @@ export default class ProductController {
 
       const product = await ProductService.create(payload);
 
-      return res.json({ message: "product created successfully", data: { user: product } });
+      return res.status(StatusCodes.CREATED).json({ message: "product created successfully", data: { user: product } });
     } catch (error: any) {
       console.log(error);
       if (error instanceof errors.E_VALIDATION_ERROR) {

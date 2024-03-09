@@ -34,7 +34,7 @@ export default class AuthController {
       // Calling Auth Repo Service for storing the data in db
       const user = await AuthService.create(payload);
 
-      return res.json({message:"user registered successfully", data : {user:user}});
+      return res.status(StatusCodes.CREATED).json({message:"user registered successfully", data : {user:user}});
     } catch (error: any) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.path));
@@ -74,7 +74,7 @@ export default class AuthController {
         expiresIn: "365d",
       });
 
-      return res.json({messaage:"login successfully", data:{user : userData}, access_token: `Bearer ${token}`});
+      return res.status(StatusCodes.ACCEPTED).json({messaage:"login successfully", data:{user : userData}, access_token: `Bearer ${token}`});
 
     } catch (error: any) {
       if (error instanceof errors.E_VALIDATION_ERROR) {

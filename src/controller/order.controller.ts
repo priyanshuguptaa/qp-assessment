@@ -68,7 +68,7 @@ export default class OrderController {
         return orderCreated;
       });
 
-      return res.json({ message: "order placed successfully", data: { orderDetails: orderDetails } });
+      return res.status(StatusCodes.CREATED).json({ message: "order placed successfully", data: { orderDetails: orderDetails } });
     } catch (error: any) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "Something went wrong", req.path));
     }
