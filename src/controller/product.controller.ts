@@ -1,6 +1,7 @@
 import vine, { errors } from "@vinejs/vine";
 import { Request, Response } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { FileArray, UploadedFile } from "express-fileupload";
 import { v4 as uuid } from "uuid";
 
 import { IUserWithId } from "../interface";
@@ -8,6 +9,8 @@ import { ProductRepositoryService as ProductService } from "../service";
 import { ErrorFormat } from "../utils/error.format";
 import { createProductSchema, updateProductSchema } from "../validations";
 import { Role } from "../utils/common.enum";
+import { imageValidator, removeImage, uploadImage } from "../utils/helper";
+import { imageBasePath } from "../utils/constants";
 
 export default class ProductController {
   static async create(req: Request, res: Response) {
@@ -19,7 +22,21 @@ export default class ProductController {
       data.isAvailable = Boolean(data.isAvailable ?? true);
 
       const validator = vine.compile(createProductSchema);
+
       const payload: any = await validator.validate(data);
+
+      if (req.files && (req.files.img as any).length > 1) {
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "Upload only one image", req.path));
+      } else if (req.files) {
+        const image = req.files.img as UploadedFile;
+        const message = imageValidator(image.size, image.mimetype);
+
+        if (message !== null) {
+          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, message, req.path));
+        }
+
+        payload.img = imageBasePath + uploadImage(image);
+      }
 
       payload.sku = uuid();
       payload.createdBy = user.id;
@@ -88,7 +105,9 @@ export default class ProductController {
         data.isAvailable = Boolean(data.isAvailable ?? true);
       }
 
-      const product = await ProductService.fetch(id);
+
+
+      const product:any = await ProductService.fetch(id);
 
       if (!product) {
         return res.status(StatusCodes.NOT_FOUND).json(new ErrorFormat(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, "no product found", req.path));
@@ -96,6 +115,23 @@ export default class ProductController {
 
       const validator = vine.compile(updateProductSchema);
       const payload: any = await validator.validate(data);
+
+      if (req.files && (req.files.img as any).length > 1) {
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "Upload only one image", req.path));
+      } else if (req.files) {
+        const image = req.files.img as UploadedFile;
+        const message = imageValidator(image.size, image.mimetype);
+
+        if (message !== null) {
+          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, message, req.path));
+        }
+
+        if(product.img){
+          removeImage(product.img)
+        }
+
+        payload.img = imageBasePath + uploadImage(image);
+      }
 
       const updatedProduct = await ProductService.update(id, payload);
 
@@ -121,10 +157,8 @@ export default class ProductController {
       const deletedProduct = await ProductService.delete(id);
 
       return res.json({ message: "Product deleted", data: { product: deletedProduct } });
-
-
     } catch (error: any) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.path));
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.path));
     }
   }
 }
