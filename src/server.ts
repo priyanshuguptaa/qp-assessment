@@ -1,12 +1,10 @@
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import fileUpload from "express-fileupload";
-import cors from "cors"
 
-
-
-import { AuthRouter, ProductRouter, OrderRouter } from "./router";
+import { AuthRouter, OrderRouter, ProductRouter } from "./router";
 
 
 const PORT = process.env.PORT;

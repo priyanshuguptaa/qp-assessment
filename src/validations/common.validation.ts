@@ -1,6 +1,7 @@
 import vine from "@vinejs/vine";
+
 import { Role } from "../utils/common.enum";
-import {CustomErrorReporter} from "./custom.error"
+import { CustomErrorReporter } from "./custom.error";
 
 
 vine.errorReporter = () => new CustomErrorReporter();

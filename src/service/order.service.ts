@@ -1,6 +1,4 @@
-import { selectProductAttributes } from "./product.service";
 import prisma from "../config/db.config";
-import { IOrder } from "../interface";
 
 export default class OrderRepositoryService {
   static async create(data: any) {

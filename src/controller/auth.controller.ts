@@ -5,7 +5,6 @@ import { Request, Response } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import jwt, { Secret } from "jsonwebtoken";
 
-
 import { ILoginData, IUserWithPassword } from "../interface";
 import { AuthRepositoryService as AuthService } from "../service";
 import { ErrorFormat } from "../utils/error.format";

@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
+
 import jwt, { Secret } from "jsonwebtoken";
-import { IUser, IUserWithId } from "../interface";
+import { IUserWithId } from "../interface";
 import { ErrorFormat } from "../utils/error.format";
 
 declare global {

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
+
 import { ICartItem, IOrderWithId } from "../interface";
 import { OrderRepositoryService as OrderService, ProductRepositoryService as ProductService } from "../service";
 import { ErrorFormat } from "../utils/error.format";
@@ -96,7 +97,7 @@ export default class OrderController {
   static async getAll(req: Request, res: Response) {
     try {
 
-
+      // Pagination
       const page: number = Number(req.query.page ?? 1);
       const limit: number = Number(req.query.limit ?? 10);
       const count : number = await OrderService.getCount();

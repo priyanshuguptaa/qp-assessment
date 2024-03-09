@@ -1,8 +1,6 @@
 import express from "express";
 
-
-
-import {ProductController} from "../controller"
+import { ProductController } from "../controller";
 import { AuthMiddleware, RoleMiddleware } from "../middleware";
 import { Role } from "../utils/common.enum";
 
