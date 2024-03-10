@@ -1,23 +1,21 @@
-import vine from "@vinejs/vine";
+import joi from "joi"
 
-import { CustomErrorReporter } from "./custom.error";
 
-vine.errorReporter = () => new CustomErrorReporter();
 
-export const createProductSchema = vine.object({
-    name: vine.string().minLength(3).maxLength(100),
-    qty: vine.number().positive(),
-    category: vine.string().minLength(3).maxLength(100),
-    description: vine.string().minLength(3).maxLength(500),
-    price: vine.number().positive(),
-    isAvailable: vine.boolean()
+export const createProductSchema = joi.object({
+    name: joi.string().min(3).max(100).required(),
+    qty: joi.number().positive().required(),
+    category: joi.string().min(3).max(100).required(),
+    description: joi.string().min(3).max(500).required(),
+    price: joi.number().positive().required(),
+    isAvailable: joi.boolean()
 });
 
-export const updateProductSchema = vine.object({
-    name: vine.string().minLength(3).maxLength(100).optional(),
-    qty: vine.number().positive().optional(),
-    category: vine.string().minLength(3).maxLength(100).optional(),
-    description: vine.string().minLength(3).maxLength(500).optional(),
-    price: vine.number().positive().optional(),
-    isAvailable: vine.boolean().optional()
+export const updateProductSchema = joi.object({
+    name: joi.string().min(3).max(100).optional(),
+    qty: joi.number().positive().optional(),
+    category: joi.string().min(3).max(100).optional(),
+    description: joi.string().min(3).max(500).optional(),
+    price: joi.number().positive().optional(),
+    isAvailable: joi.boolean().optional()
 });

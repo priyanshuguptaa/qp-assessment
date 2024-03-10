@@ -2,10 +2,10 @@ export class ErrorFormat {
   timestamp: string;
   status: number;
   error: string;
-  message: string;
+  message: string | {};
   path: string;
 
-  constructor(status: number, error: string, message: string, path: string) {
+  constructor(status: number, error: string, message: string | {}, path: string) {
     this.timestamp = new Date().toISOString();
     this.status = status;
     this.error = error;
@@ -13,3 +13,12 @@ export class ErrorFormat {
     this.path = path;
   }
 }
+
+export const formatJOIError = (error: any) => {
+  let errorMessage = {};
+  for (const err of error.details) {
+    const [field, message] = err.message?.match(/"(.*?)"\s(.*)/).slice(1);
+    errorMessage[field] = message;
+  }
+  return errorMessage;
+};

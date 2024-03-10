@@ -1,16 +1,15 @@
-import vine, { errors } from "@vinejs/vine";
 import { Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { FileArray, UploadedFile } from "express-fileupload";
 import { v4 as uuid } from "uuid";
 
 import { IUserWithId } from "../interface/user.interface";
-import  ProductService  from "../service/product.service";
-import { ErrorFormat } from "../utils/error.format";
-import { createProductSchema, updateProductSchema } from "../validations/product.validation";
+import ProductService from "../service/product.service";
 import { Role } from "../utils/common.enum";
-import { imageValidator, removeImage, uploadImage } from "../utils/helper";
 import { imageBasePath } from "../utils/constants";
+import { ErrorFormat, formatJOIError } from "../utils/error.format";
+import { imageValidator, removeImage, uploadImage } from "../utils/helper";
+import { createProductSchema, updateProductSchema } from "../validations/product.validation";
 
 export default class ProductController {
   static async create(req: Request, res: Response) {
@@ -21,9 +20,8 @@ export default class ProductController {
       data.price = Number(data.price ?? 0);
       data.isAvailable = Boolean(data.isAvailable ?? true);
 
-      const validator = vine.compile(createProductSchema);
 
-      const payload: any = await validator.validate(data);
+      const payload: any = await createProductSchema.validateAsync(data,{ abortEarly: false });
 
       if (req.files && (req.files.img as any).length > 1) {
         return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "Upload only one image", req.baseUrl + req.path));
@@ -46,8 +44,9 @@ export default class ProductController {
 
       return res.status(StatusCodes.CREATED).json({ message: "product created successfully", data: { user: product } });
     } catch (error: any) {
-      if (error instanceof errors.E_VALIDATION_ERROR) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.baseUrl + req.path));
+      if (error.isJoi) {
+        let errorMessage = formatJOIError(error)
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, errorMessage, req.baseUrl + req.path));
       } else {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.baseUrl + req.path));
       }
@@ -111,8 +110,7 @@ export default class ProductController {
         return res.status(StatusCodes.NOT_FOUND).json(new ErrorFormat(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, "no product found", req.baseUrl + req.path));
       }
 
-      const validator = vine.compile(updateProductSchema);
-      const payload: any = await validator.validate(data);
+      const payload: any = await updateProductSchema.validateAsync(data);
 
       if (req.files && (req.files.img as any).length > 1) {
         return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "Upload only one image", req.baseUrl + req.path));
@@ -135,8 +133,10 @@ export default class ProductController {
 
       return res.json({ message: "Product updated", data: { product: updatedProduct } });
     } catch (error: any) {
-      if (error instanceof errors.E_VALIDATION_ERROR) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.baseUrl + req.path));
+      if (error.isJoi) {
+        let errorMessage = formatJOIError(error)
+
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, errorMessage, req.baseUrl + req.path));
       } else {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.baseUrl + req.path));
       }
