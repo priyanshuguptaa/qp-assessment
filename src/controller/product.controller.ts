@@ -26,13 +26,13 @@ export default class ProductController {
       const payload: any = await validator.validate(data);
 
       if (req.files && (req.files.img as any).length > 1) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "Upload only one image", req.path));
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "Upload only one image", req.baseUrl + req.path));
       } else if (req.files) {
         const image = req.files.img as UploadedFile;
         const message = imageValidator(image.size, image.mimetype);
 
         if (message !== null) {
-          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, message, req.path));
+          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, message, req.baseUrl + req.path));
         }
 
         payload.img = imageBasePath + uploadImage(image);
@@ -41,17 +41,15 @@ export default class ProductController {
       payload.sku = uuid();
       payload.createdBy = user.id;
 
-      console.log("product payload", payload);
 
       const product = await ProductService.create(payload);
 
       return res.status(StatusCodes.CREATED).json({ message: "product created successfully", data: { user: product } });
     } catch (error: any) {
-      console.log(error);
       if (error instanceof errors.E_VALIDATION_ERROR) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.path));
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.baseUrl + req.path));
       } else {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.path));
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.baseUrl + req.path));
       }
     }
   }
@@ -62,12 +60,12 @@ export default class ProductController {
       const product = await ProductService.fetch(id);
 
       if (!product) {
-        return res.status(StatusCodes.NOT_FOUND).json(new ErrorFormat(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, "no product found", req.path));
+        return res.status(StatusCodes.NOT_FOUND).json(new ErrorFormat(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, "no product found", req.baseUrl + req.path));
       }
 
       return res.json({ data: { product: product } });
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.path));
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.baseUrl + req.path));
     }
   }
   static async fetchAll(req: Request, res: Response) {
@@ -83,7 +81,7 @@ export default class ProductController {
 
       return res.json({ data: { products: product }, metadata: { currentPage: page, currentLimit: limit, totalPage: totalPages, totalProduct: count } });
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.path));
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.baseUrl + req.path));
     }
   }
 
@@ -110,20 +108,20 @@ export default class ProductController {
       const product:any = await ProductService.fetch(id);
 
       if (!product) {
-        return res.status(StatusCodes.NOT_FOUND).json(new ErrorFormat(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, "no product found", req.path));
+        return res.status(StatusCodes.NOT_FOUND).json(new ErrorFormat(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, "no product found", req.baseUrl + req.path));
       }
 
       const validator = vine.compile(updateProductSchema);
       const payload: any = await validator.validate(data);
 
       if (req.files && (req.files.img as any).length > 1) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "Upload only one image", req.path));
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "Upload only one image", req.baseUrl + req.path));
       } else if (req.files) {
         const image = req.files.img as UploadedFile;
         const message = imageValidator(image.size, image.mimetype);
 
         if (message !== null) {
-          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, message, req.path));
+          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, message, req.baseUrl + req.path));
         }
 
         if(product.img){
@@ -138,9 +136,9 @@ export default class ProductController {
       return res.json({ message: "Product updated", data: { product: updatedProduct } });
     } catch (error: any) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.path));
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.baseUrl + req.path));
       } else {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.path));
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.baseUrl + req.path));
       }
     }
   }
@@ -151,14 +149,14 @@ export default class ProductController {
       const product = await ProductService.fetch(id);
 
       if (!product) {
-        return res.status(StatusCodes.NOT_FOUND).json(new ErrorFormat(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, "no product found", req.path));
+        return res.status(StatusCodes.NOT_FOUND).json(new ErrorFormat(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, "no product found", req.baseUrl + req.path));
       }
 
       const deletedProduct = await ProductService.delete(id);
 
       return res.json({ message: "Product deleted", data: { product: deletedProduct } });
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.path));
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "something went wrong", req.baseUrl + req.path));
     }
   }
 }

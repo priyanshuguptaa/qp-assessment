@@ -6,6 +6,7 @@ import fileUpload from "express-fileupload";
 
 import { AuthRouter, OrderRouter, ProductRouter } from "./router";
 import { fileLimitHandler } from "./utils/fileLimitHandler";
+import { limiter } from "./config/rateLimiter.config";
 
 const PORT = process.env.PORT;
 
@@ -22,6 +23,7 @@ server.use(
 server.use(cookieParser());
 server.use(express.static("public"));
 server.use(cors());
+server.use(limiter)
 
 // API
 server.use("/api/auth", AuthRouter);

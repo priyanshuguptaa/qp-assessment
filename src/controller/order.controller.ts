@@ -20,14 +20,13 @@ export default class OrderController {
         });
 
         if (productIds.length <= 0) {
-          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "No product id found", req.path));
+          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "No product id found", req.baseUrl + req.path));
         }
 
         const productsData: any = await ProductService.findAllByIds(productIds);
 
         const productMap = new Map<number, IOrderWithId>(productsData.map((product: IOrderWithId) => [product.id, product]));
 
-        console.log(productMap);
         let totalPrice = 0;
         let totalProduct = 0;
         let productError = [];
@@ -43,7 +42,7 @@ export default class OrderController {
         }
 
         if (productError.length) {
-          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, productError.join(", "), req.path));
+          return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, productError.join(", "), req.baseUrl + req.path));
         }
 
         for (const item of cartItems) {
@@ -71,7 +70,7 @@ export default class OrderController {
 
       return res.status(StatusCodes.CREATED).json({ message: "order placed successfully", data: { orderDetails: orderDetails } });
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "Something went wrong", req.path));
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "Something went wrong", req.baseUrl + req.path));
     }
   }
 
@@ -83,14 +82,14 @@ export default class OrderController {
       const orderDetails = await OrderService.get(orderId);
 
       if (!orderDetails) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "No order detail found", req.path));
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "No order detail found", req.baseUrl + req.path));
       } else if (user!.role === Role.USER && orderDetails.purchasedBy !== user!.id) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "unauthorized user", req.path));
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, "unauthorized user", req.baseUrl + req.path));
       }
 
       return res.json({data:{orderDetails}});
     } catch (error) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "Something went wrong", req.path));
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "Something went wrong", req.baseUrl + req.path));
     }
   }
 
@@ -113,7 +112,7 @@ export default class OrderController {
 
     } catch (error) {
       
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "Something went wrong", req.path));
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, "Something went wrong", req.baseUrl + req.path));
     }
   }
 }

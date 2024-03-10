@@ -11,7 +11,6 @@ export default class AuthRepositoryService {
 
       return user;
     } catch (error) {
-      console.error(error);
       throw new Error("Something went wrong while uploading the data in db");
     }
   }

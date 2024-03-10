@@ -16,7 +16,7 @@ declare global {
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
   if (authHeader === null || authHeader === undefined) {
-     return res.status(StatusCodes.UNAUTHORIZED).json(new ErrorFormat(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, "unauthorized", req.path));
+     return res.status(StatusCodes.UNAUTHORIZED).json(new ErrorFormat(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, "unauthorized", req.baseUrl + req.path));
   }
 
   const token = authHeader.split(" ")?.[1];
@@ -28,7 +28,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   
 
   jwt.verify(token, secretKey, (err : any, user) => {
-    if (err) return res.status(StatusCodes.UNAUTHORIZED).json(new ErrorFormat(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, "unauthorized", req.path));
+    if (err) return res.status(StatusCodes.UNAUTHORIZED).json(new ErrorFormat(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, "unauthorized", req.baseUrl + req.path));
     req.user = user as IUserWithId;
     next();
   });

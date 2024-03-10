@@ -31,7 +31,6 @@ export const removeImage = (url: string) => {
   }
   const imgPath = path.join(directoryPath,url.split('/')?.pop() ?? "") 
  
-  console.log("IMAGE PATH",imgPath)
 
   if (fs.existsSync(imgPath)) {
     fs.unlinkSync(imgPath);

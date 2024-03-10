@@ -2,3 +2,4 @@ migrations
 .env
 node_modules
 build
+*/images/

@@ -9,6 +9,7 @@ import { ILoginData, IUserWithPassword } from "../interface";
 import { AuthRepositoryService as AuthService } from "../service";
 import { ErrorFormat } from "../utils/error.format";
 import { loginSchema, registerSchema } from "../validations/common.validation";
+import logger from "../config/logger.config";
 
 export default class AuthController {
   static async register(req: Request, res: Response) {
@@ -23,7 +24,8 @@ export default class AuthController {
       const existUser = await AuthService.getByMail(payload.email);
 
       if (existUser) {
-        return res.status(StatusCodes.CONFLICT).json(new ErrorFormat(StatusCodes.CONFLICT, ReasonPhrases.CONFLICT, "email is already used", req.path));
+        logger.info("test")
+        return res.status(StatusCodes.CONFLICT).json(new ErrorFormat(StatusCodes.CONFLICT, ReasonPhrases.CONFLICT, "email is already used", req.baseUrl + req.path));
       }
 
       // hashing password
@@ -36,9 +38,9 @@ export default class AuthController {
       return res.status(StatusCodes.CREATED).json({message:"user registered successfully", data : {user:user}});
     } catch (error: any) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.path));
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.baseUrl +  req.path));
       } else {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, error.message, req.path));
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, error.message, req.baseUrl +  req.path));
       }
     }
   }
@@ -55,14 +57,14 @@ export default class AuthController {
       const user = await AuthService.getByMail(payload.email);
 
       if (!user) {
-        return res.status(StatusCodes.UNAUTHORIZED).json(new ErrorFormat(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, "email or password invalid", req.path));
+        return res.status(StatusCodes.UNAUTHORIZED).json(new ErrorFormat(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, "email or password invalid", req.baseUrl + req.path));
       }
 
       // Match Password
       const isPasswordMatch = await bcrypt.compare(payload.password, user.password);
 
       if (!isPasswordMatch) {
-        return res.status(StatusCodes.UNAUTHORIZED).json(new ErrorFormat(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, "email or password invalid", req.path));
+        return res.status(StatusCodes.UNAUTHORIZED).json(new ErrorFormat(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, "email or password invalid", req.baseUrl + req.path));
       }
 
       const { password, ...userData } = user;
@@ -77,9 +79,9 @@ export default class AuthController {
 
     } catch (error: any) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.path));
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, error.messages, req.baseUrl + req.path));
       } else {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, error.message, req.path));
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, error.message, req.baseUrl + req.path));
       }
     }
   }
