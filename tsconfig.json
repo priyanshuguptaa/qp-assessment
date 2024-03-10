@@ -1,25 +1,22 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "lib": ["ES2022"],
-    "allowJs": true,
-    "skipLibCheck": true,
+    "rootDir": "./src",
+    "target": "ES2015",
+    "module": "ESNext",
+    "types": ["node"],
+    "outDir": "./dist",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "ES2022",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    "moduleResolution": "Bundler"
   },
-  "exclude": [
-    "node_modules",
-  ],
   "ts-node": {
     "esm": true,
-    "experimentalSpecifierResolution": "node",
-  }
+    "experimentalSpecifierResolution": "node"
+  },
+  "include": [
+    "src/*/"
+  ],
+  "exclude": [
+    "node_modules",
+    "*/.test.ts"
+  ]
 }

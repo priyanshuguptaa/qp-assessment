@@ -1,7 +1,8 @@
 import express from "express";
 
-import { ProductController } from "../controller";
-import { AuthMiddleware, RoleMiddleware } from "../middleware";
+import  ProductController  from "../controller/product.controller";
+import AuthMiddleware from "../middleware/auth.middleware";
+import RoleMiddleware from "../middleware/role.middleware";
 import { Role } from "../utils/common.enum";
 
 const router = express.Router();

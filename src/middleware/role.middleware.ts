@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
-import { IUser } from "../interface";
+import { IUser } from "../interface/user.interface";
 import { ErrorFormat } from "../utils/error.format";
 
 const roleMiddleware = (role: string) => {

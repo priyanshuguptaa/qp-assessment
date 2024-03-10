@@ -5,7 +5,9 @@
   "main": "server.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --config nodemon.json src/server.ts"
+    "dev": "nodemon --config nodemon.json src/server.ts",
+    "build": "tsc -p .",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",

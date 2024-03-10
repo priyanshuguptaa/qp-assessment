@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
-import { ICartItem, IOrderWithId } from "../interface";
-import { OrderRepositoryService as OrderService, ProductRepositoryService as ProductService } from "../service";
+import { ICartItem, IOrderWithId } from "../interface/order.interface";
+import  OrderService from "../service/order.service";
+import  ProductService from "../service/product.service";
 import { ErrorFormat } from "../utils/error.format";
 import prisma from "../config/db.config";
 import { Role } from "../utils/common.enum";

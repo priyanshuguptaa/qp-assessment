@@ -4,7 +4,10 @@ import "dotenv/config";
 import express from "express";
 import fileUpload from "express-fileupload";
 
-import { AuthRouter, OrderRouter, ProductRouter } from "./router";
+// import { AuthRouter, OrderRouter, ProductRouter } from "./router";
+import AuthRouter from "./router/auth.router"
+import ProductRouter from "./router/product.router"
+import OrderRouter from "./router/order.router"
 import { fileLimitHandler } from "./utils/fileLimitHandler";
 import { limiter } from "./config/rateLimiter.config";
 

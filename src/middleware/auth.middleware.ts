@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
 import jwt, { Secret } from "jsonwebtoken";
-import { IUserWithId } from "../interface";
+import { IUserWithId } from "../interface/user.interface";
 import { ErrorFormat } from "../utils/error.format";
 
 declare global {

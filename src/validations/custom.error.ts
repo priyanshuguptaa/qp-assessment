@@ -1,5 +1,5 @@
 import { errors } from "@vinejs/vine";
-import { FieldContext } from "@vinejs/vine/build/src/types";
+
 
 
 export class CustomErrorReporter {
@@ -21,7 +21,7 @@ export class CustomErrorReporter {
   report(
     message: string,
     rule: string,
-    field: FieldContext,
+    field: any,
     meta?: any
   )  {
     this.hasErrors = true;
