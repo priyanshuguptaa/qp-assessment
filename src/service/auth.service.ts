@@ -1,5 +1,5 @@
 import prisma from "../config/db.config";
-import { IUserWithPassword } from "../interface";
+import { IUserWithPassword } from "../interface/user.interface";
 
 export default class AuthRepositoryService {
   static async create(payload: IUserWithPassword) {

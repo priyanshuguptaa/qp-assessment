@@ -1,5 +1,6 @@
 import prisma from "../config/db.config";
-import { ICartItem, IProduct, IProductUpdate } from "../interface";
+import { IProduct, IProductUpdate } from "../interface/product.interface";
+import { ICartItem } from "../interface/order.interface";
 
 export default class ProductRepositoryService {
   static async create(payload: IProduct) {

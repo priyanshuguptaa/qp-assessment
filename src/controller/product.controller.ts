@@ -7,7 +7,7 @@ import { v4 as uuid } from "uuid";
 import { IUserWithId } from "../interface/user.interface";
 import  ProductService  from "../service/product.service";
 import { ErrorFormat } from "../utils/error.format";
-import { createProductSchema, updateProductSchema } from "../validations/";
+import { createProductSchema, updateProductSchema } from "../validations/product.validation";
 import { Role } from "../utils/common.enum";
 import { imageValidator, removeImage, uploadImage } from "../utils/helper";
 import { imageBasePath } from "../utils/constants";
