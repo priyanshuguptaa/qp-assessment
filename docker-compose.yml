@@ -1,4 +1,4 @@
-version: "3.3"
+version: "2.1"
 
 services:
   postgres:
@@ -22,7 +22,8 @@ services:
     ports:
       - '8000:8000'
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     container_name: grocery_api
 
 volumes:
