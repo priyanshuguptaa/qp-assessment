@@ -1,0 +1,397 @@
+{
+	"info": {
+		"_postman_id": "ee7c7aaf-b58b-4869-af39-2dd26c2ffe2b",
+		"name": "question pro",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21663867"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register ADMIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n         \"firstName\": \"prince\",\n        \"lastName\": \"gupta\",\n        \"email\": \"abc@gmail.cnnomxx\",\n        \"password\": \"123456\",\n        \"role\": \"ADMIN\",\n        \"password_confirmation\":\"123456\",\n        \"phone\": \"7045252758\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n         \"firstName\": \"prince\",\n        \"lastName\": \"gupta\",\n        \"email\": \"axs@gmail.cnnomxx\",\n        \"password\": \"123456\",\n        \"role\": \"USER\",\n        \"password_confirmation\":\"123456\",\n        \"phone\": \"7045252758\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"abc@gmail.cnnomxx\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiZG9uIiwibGFzdE5hbWUiOiJndXB0YSIsImVtYWlsIjoiYWJjQGdtYWlsLmNvbSIsInBob25lIjoiNzA0NTI1Mjc1OCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcxMDE0NTYxOSwiZXhwIjoxNzQxNjgxNjE5fQ.YgC7i2s8DRsGKC_ewZrygeP8-g_zje_Sr35CImvx1_0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Product 1",
+									"type": "text"
+								},
+								{
+									"key": "qty",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "fruits",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "These is good",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "isAvailable",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "img",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/product/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"product",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZmlyc3ROYW1lIjoicHJpbmNlIiwibGFzdE5hbWUiOiJndXB0YSIsImVtYWlsIjoiYWJjQGdtYWlsLmNubm9teHgiLCJwaG9uZSI6IjcwNDUyNTI3NTgiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDk0ODQyMDEsImV4cCI6MTc0MTAyMDIwMX0.e1jyrkLhgdJkQDz78ald8NxHPm6DPwLM_H1Qgpy8OB8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/product/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"product",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZmlyc3ROYW1lIjoicHJpbmNlIiwibGFzdE5hbWUiOiJndXB0YSIsImVtYWlsIjoiYWJjQGdtYWlsLmNubm9teHgiLCJwaG9uZSI6IjcwNDUyNTI3NTgiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDk0OTUzMDksImV4cCI6MTc0MTAzMTMwOX0.OJX23fsfcLtqcrk7Mj1TZYNnqxL2me1jZ_HpCrDQBqg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/product/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"product",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZmlyc3ROYW1lIjoicHJpbmNlIiwibGFzdE5hbWUiOiJndXB0YSIsImVtYWlsIjoiYWJjQGdtYWlsLmNubm9teHgiLCJwaG9uZSI6IjcwNDUyNTI3NTgiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDk0OTUzMDksImV4cCI6MTc0MTAzMTMwOX0.OJX23fsfcLtqcrk7Mj1TZYNnqxL2me1jZ_HpCrDQBqg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "category",
+									"value": "Vegetable",
+									"type": "text"
+								},
+								{
+									"key": "img",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/product/16",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"product",
+								"16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZmlyc3ROYW1lIjoicHJpbmNlIiwibGFzdE5hbWUiOiJndXB0YSIsImVtYWlsIjoiYWJjQGdtYWlsLmNubm9teHgiLCJwaG9uZSI6IjcwNDUyNTI3NTgiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDk0OTUzMDksImV4cCI6MTc0MTAzMTMwOX0.OJX23fsfcLtqcrk7Mj1TZYNnqxL2me1jZ_HpCrDQBqg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/product/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "book order",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get orderDetails",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZmlyc3ROYW1lIjoicHJpbmNlIiwibGFzdE5hbWUiOiJndXB0YSIsImVtYWlsIjoiYWJjQGdtYWlsLmNubm9teHgiLCJwaG9uZSI6IjcwNDUyNTI3NTgiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDk0OTUzMDksImV4cCI6MTc0MTAzMTMwOX0.OJX23fsfcLtqcrk7Mj1TZYNnqxL2me1jZ_HpCrDQBqg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/order/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"order",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZmlyc3ROYW1lIjoicHJpbmNlIiwibGFzdE5hbWUiOiJndXB0YSIsImVtYWlsIjoiYWJjQGdtYWlsLmNubm9teHgiLCJwaG9uZSI6IjcwNDUyNTI3NTgiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDk0OTUzMDksImV4cCI6MTc0MTAzMTMwOX0.OJX23fsfcLtqcrk7Mj1TZYNnqxL2me1jZ_HpCrDQBqg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/order/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"order",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
