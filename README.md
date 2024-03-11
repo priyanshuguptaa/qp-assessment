@@ -52,3 +52,8 @@ The Grocery Booking API facilitates online booking and management of grocery ord
   psql -h localhost -p 5400 -U postgres -d grocery_db -c "\dt"
 
 ```
+## Tech Stack
+
+
+**Server:** Node, Express, Typescript, PostgreSQL, Prisma, Docker 
+
