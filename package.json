@@ -4,6 +4,10 @@
   "description": "question pro assignment",
   "main": "server.ts",
   "scripts": {
+    "prisma:init": "npx prisma init",
+    "prisma:migrate:dev": "npx prisma migrate dev",
+    "prisma:generate":"npx prisma generate",
+    "prisma:deploy":"npx prisma migrate deploy",
     "build": "rm -rf dist && npx tsc && echo 'Dist folder created'",
     "build:win": "rmdir /s /q dist && npx tsc && echo 'Dist folder created'",
     "start": "node dist/server.js",

@@ -14,7 +14,7 @@ export interface IUserWithId extends IUser{
 
 export interface IUserWithPassword extends IUser {
   password: string;
-  password_confirmation ?: string;
+  confirmPassword ?: string;
 }
 
 export interface ILoginData {

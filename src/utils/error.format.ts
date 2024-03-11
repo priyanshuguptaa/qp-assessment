@@ -15,8 +15,10 @@ export class ErrorFormat {
 }
 
 export const formatJOIError = (error: any) => {
+  console.log("ERROR",error)
+
   let errorMessage = {};
-  for (const err of error.details) {
+  for (const err of error?.details) {
     const [field, message] = err.message?.match(/"(.*?)"\s(.*)/).slice(1);
     errorMessage[field] = message;
   }

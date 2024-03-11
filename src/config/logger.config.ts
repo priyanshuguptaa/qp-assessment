@@ -1,17 +1,15 @@
 import winston, { format, transports } from "winston";
-import "winston-mongodb"
-
 
 
 const logger = winston.createLogger({
   level: "debug",
 
-  format: format.combine( format.timestamp(), format.json(), format.metadata()),
+  format: format.combine( format.timestamp(), format.json(), format.metadata(),format.errors({ stack: true })),
 
   transports: [
-    new transports.MongoDB({
-      db : process.env.MONGODB_URI as string,
-      collection : "groceryLogs"
+    new transports.File({
+      level:'error',
+      filename : 'logs/errors.log'
     })
   ],
 });

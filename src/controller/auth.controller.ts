@@ -5,10 +5,9 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import jwt, { Secret } from "jsonwebtoken";
 
 import { ILoginData, IUserWithPassword } from "../interface/user.interface";
-import  AuthService  from "../service/auth.service";
+import AuthService from "../service/auth.service";
 import { ErrorFormat, formatJOIError } from "../utils/error.format";
 import { loginSchema, registerSchema } from "../validations/user.validation";
-import logger from "../config/logger.config";
 
 export default class AuthController {
   static async register(req: Request, res: Response) {
@@ -22,7 +21,6 @@ export default class AuthController {
       const existUser = await AuthService.getByMail(payload.email);
 
       if (existUser) {
-        logger.info("test")
         return res.status(StatusCodes.CONFLICT).json(new ErrorFormat(StatusCodes.CONFLICT, ReasonPhrases.CONFLICT, "email is already used", req.baseUrl + req.path));
       }
 
@@ -30,17 +28,19 @@ export default class AuthController {
       const salt = await bcrypt.genSalt(10);
       payload.password = await bcrypt.hash(payload.password, salt);
 
+      delete payload.confirmPassword;
+
       // Calling Auth Repo Service for storing the data in db
       const user = await AuthService.create(payload);
 
-      return res.status(StatusCodes.CREATED).json({message:"user registered successfully", data : {user:user}});
+      return res.status(StatusCodes.CREATED).json({ message: "user registered successfully", data: { user: user } });
     } catch (error: any) {
       if (error.isJoi) {
-        let errorMessage = formatJOIError(error)
+        let errorMessage = formatJOIError(error);
 
-        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, errorMessage, req.baseUrl +  req.path));
+        return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, errorMessage, req.baseUrl + req.path));
       } else {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, error.message, req.baseUrl +  req.path));
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, error.message, req.baseUrl + req.path));
       }
     }
   }
@@ -68,17 +68,16 @@ export default class AuthController {
 
       const { password, ...userData } = user;
 
-      const secretKey : Secret = process.env.JWT_SECRET as Secret;
+      const secretKey: Secret = process.env.JWT_SECRET as Secret;
 
       const token = jwt.sign(userData, secretKey, {
         expiresIn: "365d",
       });
 
-      return res.status(StatusCodes.ACCEPTED).json({messaage:"login successfully", data:{user : userData}, access_token: `Bearer ${token}`});
-
+      return res.status(StatusCodes.ACCEPTED).json({ messaage: "login successfully", data: { user: userData }, access_token: `Bearer ${token}` });
     } catch (error: any) {
       if (error.isJoi) {
-        let errorMessage = formatJOIError(error)
+        let errorMessage = formatJOIError(error);
         return res.status(StatusCodes.BAD_REQUEST).json(new ErrorFormat(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST, errorMessage, req.baseUrl + req.path));
       } else {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(new ErrorFormat(StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR, error.message, req.baseUrl + req.path));

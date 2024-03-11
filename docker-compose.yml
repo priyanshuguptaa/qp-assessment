@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+  postgres:
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=grocery_db
+    ports:
+      - "5400:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    container_name: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -p 5432 -U postgres"]
+      timeout: 20s
+      retries: 10
+
+  server:
+    build: .
+    ports:
+      - '8000:8000'
+    depends_on:
+      - postgres
+    container_name: grocery_api
+
+volumes:
+  postgres_data: {}
