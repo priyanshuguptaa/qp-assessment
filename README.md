@@ -52,6 +52,8 @@ The Grocery Booking API facilitates online booking and management of grocery ord
   psql -h localhost -p 5400 -U postgres -d grocery_db -c "\dt"
 
 ```
+
+7) Use postman collection
 ## Tech Stack
 
 
